@@ -31,7 +31,8 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void newBall(){
-
+        //random = new Random();
+        ball=new Ball((GAME_WIDTH/2)-(BALL_DIAMETER/2),(GAME_HEIGHT/2)-(BALL_DIAMETER/2),BALL_DIAMETER,BALL_DIAMETER);
     }
 
     public void newPaddles() {
@@ -49,14 +50,30 @@ public class GamePanel extends JPanel implements Runnable{
     public void draw(Graphics g){
         paddle1.draw(g);
         paddle2.draw(g);
+        ball.draw(g);
     }
 
     public void move(){
-
+        paddle1.move();
+        ball.move();
     }
 
     public void checkCollision(){
+        //bounce ball at the edge
+        if(ball.y<=0)
+            ball.setYDirection(-ball.yVelocity);
+        if(ball.y>=GAME_HEIGHT-BALL_DIAMETER)
+            ball.setYDirection(-ball.yVelocity);
 
+        //stops paddle at window
+        if(paddle1.y<=0)
+            paddle1.y=0;
+        if(paddle1.y>=(GAME_HEIGHT-PADDLE_HEIGHT))
+            paddle1.y=GAME_HEIGHT-PADDLE_HEIGHT;
+        if(paddle2.y<=0)
+            paddle2.y=0;
+        if(paddle2.y>=(GAME_HEIGHT-PADDLE_HEIGHT))
+            paddle2.y=GAME_HEIGHT-PADDLE_HEIGHT;
     }
 
     public void run(){
@@ -82,10 +99,12 @@ public class GamePanel extends JPanel implements Runnable{
 
     public class AL extends KeyAdapter {
         public void keyPressed(KeyEvent e){
-
+            paddle1.keyPressed(e);
+            paddle2.keyPressed(e);
         }
         public void keyReleased(KeyEvent e){
-
+            paddle1.keyReleased(e);
+            paddle2.keyReleased(e);
         }
     }
 }
